@@ -86,7 +86,7 @@ int main()
   int test[CASE_W][CASE_H];
   
   memset(test, 0, sizeof(test));
-
+  
   clear_bitmap(screen);
 
   buffer = create_bitmap(800, 768);
