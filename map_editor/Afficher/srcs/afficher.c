@@ -56,7 +56,7 @@ int main()
   memset(test, 0, sizeof(test));
   int x,y;
   int value;
-  fichier = fopen("map.lvl","r");
+  fichier = fopen("../map/map.lvl","r");
 
   for (y = 0; y<600/32; y++)
   {

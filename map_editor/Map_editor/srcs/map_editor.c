@@ -64,7 +64,7 @@ void save_map(int map[CASE_W][CASE_H])
   int x;
 
   FILE * fichier;
-  fichier = fopen("map.lvl","w+");
+  fichier = fopen("../map/map.lvl","w+");
   for (y = 0; y<600/32; y++)
   {
     for (x = 0; x< 800 / 32; x++)
