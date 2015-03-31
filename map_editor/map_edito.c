@@ -1,3 +1,6 @@
+/*
+From: Alexis Bollia <alexis@bollia.fr>
+*/
 #include <allegro.h>
 #include <stdio.h>
 #include <string.h>
