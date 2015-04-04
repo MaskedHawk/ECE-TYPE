@@ -5,7 +5,7 @@ From: Alexis Bollia <alexis@bollia.fr>
 #include <stdio.h>
 #include <string.h>
 
-#define CASE_W 800/32
+#define CASE_W 1600/32
 #define CASE_H 600/32
 
 /* allegro init function */
@@ -64,16 +64,18 @@ void save_map(int map[CASE_W][CASE_H])
   int x;
 
   FILE * fichier;
-  fichier = fopen("../map/map.lvl","w+");
-  for (y = 0; y<600/32; y++)
+  char loc[] = "../map/map.lvl";
+  fichier = fopen(loc,"w+");
+  
+  for (y = 0; y < CASE_H; y++)
   {
-    for (x = 0; x< 800 / 32; x++)
+    for (x = 0; x < CASE_W; x++)
     {
       fprintf(fichier, "%d ", map[x][y]);
     }
-      fprintf(fichier, "\n");
+    fprintf(fichier, "\n");
   }
-  fclose( fichier );
+  fclose(fichier);
 }
 
 int main()
@@ -84,8 +86,8 @@ int main()
   buffer = create_bitmap(800, 768);
   
   BITMAP* bloc;
-  bloc = create_bitmap(800, 600 - 24);
-  clear_to_color(bloc, makecol(255, 0, 255));
+  bloc = create_bitmap((CASE_W * 32), 600 - 24);
+  clear_to_color(bloc, makecol(0, 0, 0));
   blit(bloc, buffer, 0, 0, 0, 0, bloc->w, bloc->h);
     
   BITMAP* select;
@@ -98,24 +100,31 @@ int main()
   int x = 0;
   int y = 0;
 
+  int blocx = 0;
 /* map */
   int map[CASE_W][CASE_H];
-  memset(map, 0, sizeof(map));
-  
-      
-  while(!key[KEY_ESC])
-  {
-    x = (mouse_x / 32) * 32;
-    y = (mouse_y / 32) * 32;
 
-    draw_sprite(buffer, bloc, 0, 0);
+  for (y = 0; y < CASE_H; y++)
+  {
+    for (x = 0; x < CASE_W; x++)
+    {
+      map[x][y] = 0;
+    }
+  }
+  x=0;
+  y = 0;
+  while(!key[KEY_ESC])
+  { 
+    x = (mouse_x / 32) * 32 + blocx;
+    y = (mouse_y / 32) * 32;
     
+    draw_sprite(buffer, bloc, - blocx, 0 );
     if ((mouse_x / 32) < CASE_W && (mouse_y / 32) < CASE_H)
     {
       if (mouse_b & 1)
       {
-	blit(select, bloc, (selectX) * 32 ,(selectY) * 32, x ,y ,32, 32);
-	map[x / 32][y / 32] = (selectY * 100) + selectX;
+	blit(select, bloc, (selectX) * 32, (selectY) * 32, x ,y ,32, 32);
+	map[(x  / 32)][y / 32] = (selectY * 100) + selectX;
       }
     }
 
@@ -126,21 +135,32 @@ int main()
     }
 /* test */
     textprintf_ex(buffer, font, 10, 10, makecol(255, 100, 200),
-		  -1, "%d", selectY);
+		  -1, "%d %d", (x  / 32) +(blocx/32), map[((x  / 32) + (blocx/32))][y / 32]);
 /*******/
     
     draw_line(buffer, buffer->w, buffer->h);
 
 /* cursor function */
-    if(mouse_y < 576) draw_cursor(buffer, x, y);   
-
+    if(mouse_y < 576) draw_cursor(buffer, x - blocx, y);
     show_mouse(buffer);
-    
     blit(buffer, screen, 0, 0, 0, 0, buffer->w, buffer->h);
-    
+    if(key[KEY_RIGHT] && blocx < (bloc->w - 800))
+    {
+      blocx += 32;
+      rest(10);
+    }
+    if(key[KEY_LEFT] && blocx != 0) blocx -= 32;
     rest(20);
   }
   save_map(map);
+  for (y = 0; y < CASE_H; y++)
+  {
+    for (x = 0; x < CASE_W; x++)
+    {
+      printf("%d ",map[x][y]);
+    }
+    printf("\n");
+  }
 
   return(0);
 

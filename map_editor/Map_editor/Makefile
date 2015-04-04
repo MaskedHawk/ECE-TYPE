@@ -3,7 +3,7 @@
 EXT = c
 CC = gcc
 EXEC = Map_Editor
-CXXFLAGS = -Wall -W 
+CXXFLAGS = -Wall -W -Werror
 LDFLAGS =`allegro-config --cflags --libs`
 
 

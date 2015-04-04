@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define CASE_W 1600 / 32
-#define CASE_H 600 / 32
+#define CASE_W 1600/32
+#define CASE_H 600/32
 
 /* allegro init function */
 void init_allegro()
@@ -54,35 +54,26 @@ int main()
   buffer = create_bitmap(800, 600-24);
   bloc = load_bmp_check("images/bloc.bmp");
 
-  background = create_bitmap(1600,600-24);
+  background = creat_bitmap(1600,600-24);
   int test[CASE_W][CASE_H];
   memset(test, 0, sizeof(test));
   int x,y;
   int value;
-  int dx = 0;
   fichier = fopen("../map/map.lvl","r");
-  
-  for (y = 0; y < 600 / 32; y++)
+
+  for (y = 0; y<600/32; y++)
   {
-    for (x = 0; x < CASE_W; x++)
+    for (x = 0; x< 800 / 32; x++)
     {
       fscanf(fichier, "%d ",&test[x][y]);
       value= test[x][y];
-      blit(bloc, background, (value % 100) * 32, (value / 100) * 32, x * 32, y *32, 32, 32);
+      blit(bloc, buffer, (value % 100) * 32, (value / 100) * 32, x * 32, y *32, 32, 32);
     }
   }
-  blit(background, buffer,0 ,0 ,0 ,0, buffer->w, buffer->h);
   blit(buffer, screen, 0, 0, 0, 0, buffer->w, buffer->h);
   while(!key[KEY_ESC])
   {
-    clear_bitmap(buffer);
-    if(dx + 800 != 1600)
-    {
-    blit(background, buffer,dx ,0 ,0 ,0, buffer->w, buffer->h);
-    blit(buffer, screen, 0, 0, 0, 0, buffer->w, buffer->h);
-    dx += 2;
-    rest(20);
-    }
+
   }
   
   return 0;
